@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "This is a crud api to learn fullstack development with js",
   "main": "server.js",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "server": "nodemon server.js"
   },
