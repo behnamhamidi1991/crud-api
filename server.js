@@ -1,25 +1,29 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 5000;
 const mongoose = require("mongoose");
-const env = require("dotenv").config();
 const blogRoute = require("./routes/blog.route");
-
-if (env.error) {
-  throw env.error;
-}
 
 app.use(express.json());
 
 app.use("/api/blog", blogRoute);
 
-app.get("/", (req, res) => {
-  res.send("Hello from server!");
+app.listen(3000, () => {
+  console.log(`Server is running on port 3000`);
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+const fs = require("fs");
+const dotenv = require("dotenv");
+const envFilePath = "/app/.env";
+
+if (fs.existsSync(envFilePath)) {
+  dotenv.config({ path: envFilePath });
+} else {
+  console.warn(
+    ".env file not found. Ensure that environment variables are set."
+  );
+}
 
 // DB
 const connect = async () => {
@@ -32,3 +36,12 @@ const connect = async () => {
 };
 
 connect();
+
+// VIEW
+app.set("view engine", "ejs");
+
+app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+  res.render("index", { title: "Home Page" });
+});
